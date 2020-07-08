@@ -7,6 +7,17 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
+variable "map_public_ip_on_launch" {
+  default = true
+}
+
+variable "key" {
+  default = {
+    name       = "key"
+    public_key = "~/.ssh/id_rsa.pub"
+  }
+}
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
   filter {

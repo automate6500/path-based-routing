@@ -5,4 +5,6 @@ systemctl start docker
 systemctl enable docker
 usermod -a -G docker ec2-user
 docker info
-docker run --name nginx --restart always --detach --publish 80:80 nginx
+docker run --name nginx --restart always --detach --publish 3000:80   nginx
+docker run --name web   --restart always --detach --publish 80:80     benpiper/mtwa:web
+docker run --name app   --restart always --detach --publish 8080:8080 benpiper/mtwa:app

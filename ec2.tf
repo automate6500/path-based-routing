@@ -37,8 +37,8 @@ resource "aws_security_group" "ec2" {
   timeouts {}
 }
 
-resource "aws_instance" "instance" {
-  key_name                    = aws_key_pair.key.key_name
+resource "aws_instance" "web" {
+  key_name                    = aws_key_pair.key.key_name # remove this when development is complete
   for_each                    = local.subnets
   ami                         = data.aws_ami.amazon_linux.id
   monitoring                  = false
@@ -46,16 +46,11 @@ resource "aws_instance" "instance" {
   availability_zone           = each.value.availability_zone
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.subnets[each.key].id
-  tags                        = { Name = "${terraform.workspace}-server-${each.key}" }
+  tags                        = { Name = "${terraform.workspace}-web-${each.key}" }
   vpc_security_group_ids      = [aws_security_group.ec2.id]
-  user_data                   = file("user_data.sh")
+  user_data                   = file("web_user_data.sh")
   lifecycle {
     create_before_destroy = "true"
     ignore_changes        = [tags]
   }
-}
-
-resource "aws_key_pair" "key" {
-  key_name   = var.key.name
-  public_key = file("${var.key.public_key}")
 }

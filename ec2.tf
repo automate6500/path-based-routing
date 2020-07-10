@@ -34,7 +34,7 @@ resource "aws_instance" "web" {
   key_name                    = aws_key_pair.key.key_name
   monitoring                  = false
   subnet_id                   = aws_subnet.subnets[each.key].id
-  tags                        = { Name = "${terraform.workspace}-web-${each.key}" }
+  tags                        = { Name = "${terraform.workspace}-web${each.key}" }
   user_data                   = file("user_data.sh")
   vpc_security_group_ids      = [aws_security_group.ec2.id]
 
@@ -53,8 +53,8 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --hostname web-${each.key} --env APPSERVER=http://${aws_lb.alb["app"].dns_name}:8080 --detach --publish 80:80 benpiper/mtwa:web",
-      "sudo docker run --name img --restart always --hostname imagegen-${each.key} --detach --publish 81:80 benpiper/imagegen"
+      "sudo docker run --name web${each.key} --restart always --hostname web${each.key} --env APPSERVER=http://${aws_lb.alb["app"].dns_name}:8080 --detach --publish 80:80 benpiper/mtwa:web",
+      "sudo docker run --name img${each.key} --restart always --hostname imagegen${each.key} --detach --publish 81:80 benpiper/imagegen"
     ]
   }
 }
@@ -68,7 +68,7 @@ resource "aws_instance" "app" {
   key_name                    = aws_key_pair.key.key_name
   monitoring                  = false
   subnet_id                   = aws_subnet.subnets[each.key].id
-  tags                        = { Name = "${terraform.workspace}-app-${each.key}" }
+  tags                        = { Name = "${terraform.workspace}-app${each.key}" }
   user_data                   = file("user_data.sh")
   vpc_security_group_ids      = [aws_security_group.ec2.id]
 
@@ -87,7 +87,7 @@ resource "aws_instance" "app" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --hostname app-${each.key} --detach --publish 8080:8080 benpiper/mtwa:app",
+      "sudo docker run --name web --restart always --hostname app${each.key} --detach --publish 8080:8080 benpiper/mtwa:app",
     ]
   }
 }

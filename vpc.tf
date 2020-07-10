@@ -1,14 +1,12 @@
 resource "aws_vpc" "vpc" {
   cidr_block       = "172.31.0.0/16"
   instance_tenancy = "default"
-
-  tags = {
-    Name = "${terraform.workspace} vpc"
-  }
+  tags             = { Name = "${terraform.workspace}-vpc" }
 }
 
 resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.vpc.id
+  tags   = { Name = "${terraform.workspace}-gateway" }
 }
 
 resource "aws_route" "route" {
@@ -23,4 +21,5 @@ resource "aws_subnet" "subnets" {
   cidr_block              = each.value.cidr_block
   map_public_ip_on_launch = each.value.map_public_ip_on_launch
   availability_zone       = each.value.availability_zone
+  tags                    = { Name = "${terraform.workspace}-subnet-${each.key}" }
 }

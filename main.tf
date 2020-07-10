@@ -11,10 +11,15 @@ variable "map_public_ip_on_launch" {
   default = true
 }
 
+variable "user" {
+  default = "ec2-user"
+}
+
 variable "key" {
   default = {
-    name       = "key"
-    public_key = "~/.ssh/id_rsa.pub"
+    name        = "terraform"
+    public_key  = "terraform.pub"
+    private_key = "terraform.pem"
   }
 }
 

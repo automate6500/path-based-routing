@@ -87,7 +87,7 @@ resource "aws_instance" "app" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --hostname app${each.key} --detach --publish 8080:8080 benpiper/mtwa:app",
+      "sudo docker run --name app --restart always --hostname app${each.key} --detach --publish 8080:8080 benpiper/mtwa:app",
     ]
   }
 }

@@ -38,17 +38,17 @@ resource "aws_security_group" "ec2" {
 }
 
 resource "aws_instance" "web" {
-  key_name                    = aws_key_pair.key.key_name
   for_each                    = local.subnets
   ami                         = data.aws_ami.amazon_linux.id
-  monitoring                  = false
   associate_public_ip_address = each.value.map_public_ip_on_launch
   availability_zone           = each.value.availability_zone
   instance_type               = var.instance_type
+  key_name                    = aws_key_pair.key.key_name
+  monitoring                  = false
   subnet_id                   = aws_subnet.subnets[each.key].id
   tags                        = { Name = "${terraform.workspace}-web-${each.key}" }
-  vpc_security_group_ids      = [aws_security_group.ec2.id]
   user_data                   = file("user_data.sh")
+  vpc_security_group_ids      = [aws_security_group.ec2.id]
 
   lifecycle {
     create_before_destroy = "true"
@@ -65,8 +65,8 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --detach --publish 80:80   benpiper/mtwa:web",
-      "sudo docker run --name img --restart always --detach --publish 81:80   benpiper/imagegen"
+      "sudo docker run --name web --restart always --detach --publish 80:80 benpiper/mtwa:web",
+      "sudo docker run --name img --restart always --detach --publish 81:80 benpiper/imagegen"
     ]
   }
 }

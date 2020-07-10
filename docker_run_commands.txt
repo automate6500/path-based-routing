@@ -1,5 +1,0 @@
-app_user_data.sh:docker run --name app --restart always --detach --publish 8080:8080 benpiper/mtwa:app
-dba_user_data.sh:docker run --name dba --restart always --detach --publish 3306:3306 benpiper/mtwa-db
-web_user_data.sh:docker run --name web --restart always --detach --publish 80:80   benpiper/mtwa:web
-web_user_data.sh:docker run --name img --restart always --detach --publish 81:80   benpiper/imagegen
-

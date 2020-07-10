@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 variable "instance_type" {
-  default = "t3.nano"
+  default = "t3a.medium"
 }
 
 variable "map_public_ip_on_launch" {
@@ -18,8 +18,8 @@ variable "user" {
 variable "key" {
   default = {
     name        = "terraform"
-    public_key  = "terraform.pub"
-    private_key = "terraform.pem"
+    public_key  = "public_key.pub"
+    private_key = "private_key.pem"
   }
 }
 

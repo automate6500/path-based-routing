@@ -108,3 +108,12 @@ resource "aws_lb_target_group_attachment" "web" {
   port             = 80
   depends_on       = [aws_instance.web]
 }
+
+resource "aws_lb_target_group_attachment" "app" {
+  for_each         = aws_instance.app
+  target_group_arn = aws_lb_target_group.alb["app"].arn
+  target_id        = aws_instance.app[each.key].id
+  port             = 8080
+  depends_on       = [aws_instance.app]
+}
+

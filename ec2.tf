@@ -53,8 +53,8 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --detach --publish 80:80 benpiper/mtwa:web",
-      "sudo docker run --name img --restart always --detach --publish 81:80 benpiper/imagegen"
+      "sudo docker run --name web --restart always --hostname web-${each.key} --env APPSERVER=http://${aws_lb.alb["app"].dns_name}:8080 --detach --publish 80:80 benpiper/mtwa:web",
+      "sudo docker run --name img --restart always --hostname imagegen-${each.key} --detach --publish 81:80 benpiper/imagegen"
     ]
   }
 }
@@ -87,7 +87,7 @@ resource "aws_instance" "app" {
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
-      "sudo docker run --name web --restart always --detach --publish 8080:8080 benpiper/mtwa:app",
+      "sudo docker run --name web --restart always --hostname app-${each.key} --detach --publish 8080:8080 benpiper/mtwa:app",
     ]
   }
 }

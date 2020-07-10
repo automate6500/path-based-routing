@@ -14,6 +14,12 @@ resource "aws_lb_target_group" "img" {
     path                = "/image.php"
     port                = "traffic-port"
   }
+
+  stickiness {
+    type            = "lb_cookie"
+    enabled         = true
+    cookie_duration = 300
+  }
 }
 
 resource "aws_lb_listener_rule" "img" {

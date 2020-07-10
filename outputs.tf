@@ -7,6 +7,6 @@ output "app" {
 }
 
 output "z_external" {
-  value = aws_lb.ext.dns_name
+  value = { for i in aws_lb.alb : i.name => i.dns_name }
 }
 

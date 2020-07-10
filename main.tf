@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 variable "instance_type" {
-  default = "t2.micro"
+  default = "t3.nano"
 }
 
 variable "map_public_ip_on_launch" {
